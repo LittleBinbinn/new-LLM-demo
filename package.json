@@ -1,0 +1,21 @@
+{
+  "name": "llm-demo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "element-plus": "^2.4.1",
+    "http-proxy-middleware": "^2.0.6",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.4.0",
+    "sass": "^1.69.5",
+    "vite": "^4.4.11"
+  }
+}
