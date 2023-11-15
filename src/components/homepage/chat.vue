@@ -26,10 +26,11 @@ function send() {
 <template>
     <div class="all">
         <div class="top">
-            <div class="logo">logo</div>
+            <div class="logo"><img src="@/images/logo.png"></div>
+            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })">对话</div>
+            <div class="change-two"><img src="@/images/change-two.png"  @click="router.push({ path: '/database' })">数据库</div>
             <div class="navigator">
                 <img class="user" src="@/images/user.png">
-                <img class="list" src="@/images/list.png" alt="" @click="router.push({ path: '/database' })">
             </div>
         </div>
         <el-container class="content">
@@ -94,7 +95,9 @@ function send() {
     font-size: 28px;
     color:black;
 }
-
+img{
+    cursor: pointer;
+}
 .all{
     height: 100vh;
     width: 100%;
@@ -111,14 +114,19 @@ function send() {
     cursor: pointer;
 }
 
+.change-one{
+    flex-grow: 2;
+}
 .logo {
     position: relative;
-    flex-grow: 35;
+    flex-grow: 10;
     margin-left: 25px;
     font-size: 20px;
     color: raba(0, 0, 0, 1);
 }
-
+.change-two{
+    flex-grow: 50;
+}
 .navigator {
     position: relative;
     flex-grow: 1;

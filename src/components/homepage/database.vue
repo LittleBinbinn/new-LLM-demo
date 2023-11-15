@@ -96,10 +96,12 @@ function show(index) {
 <template>
     <div class="all">
         <div class="top">
-            <div class="logo">logo</div>
+            <div class="logo"><img src="@/images/logo.png"></div>
+            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })" >对话</div>
+            <div class="change-two"><img src="@/images/change-two.png" @click="router.push({ path: '/database' })">数据库</div>
             <div class="navigator">
                 <img class="user" src="@/images/user.png">
-                <img class="list" src="@/images/list.png" alt="" @click="router.push({ path: '/chat' })">
+                <img class="list" src="@/images/list.png" alt="" >
             </div>
         </div>
         <el-container class="content">
@@ -143,47 +145,11 @@ function show(index) {
                     </div>
                 </el-upload>
             </div>
-            <!-- <div class="display" v-show="!judge">
-                <div class="exit">
-                当前文件：{{ current }}
-                <button @click="exit()">返回</button>
-            </div>
-            <div id="display"></div>
-          </div> -->
             </el-main>
-            
         </el-container>
     </div>
 </template>
 <style scoped lang='scss'>
-
-.display {
-  /* margin-left: 50px; */
-  // width: 1132px;
-  width: 100%;
-  height: 490px;
-  /* height: 100%; */
-  /* border-radius: 10px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #19c37d; */
-  flex: 1;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  /* background-color: #19c37d; */
-}
-
-.display {
-  height: 600px;
-  padding: 0px 120px;
-}
-
-#display {
-  margin-top: 20px;
-}
-
-
-
 .user-img {
     margin-right: 20px;
     flex-shrink: 0;
@@ -218,7 +184,9 @@ function show(index) {
 }
 
 
-
+img{
+    cursor: pointer;
+}
 .all {
     height: 100vh;
     width: 100%;
@@ -243,15 +211,22 @@ function show(index) {
     align-items: center;
 }
 
+
+.list{
+    cursor: pointer;
+}
+.change-one{
+    flex-grow: 2;
+}
 .logo {
     position: relative;
-    flex-grow: 35;
+    flex-grow: 10;
     margin-left: 25px;
     font-size: 20px;
     color: raba(0, 0, 0, 1);
 }
-.list{
-    cursor: pointer;
+.change-two{
+    flex-grow: 50;
 }
 .navigator {
     position: relative;
