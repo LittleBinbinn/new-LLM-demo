@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { sendChat } from '../../api/chat';
-import { ElMessage } from 'element-plus';
+import { ElMessage,ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -22,15 +22,46 @@ function send() {
         ElMessage.error("获取信息失败!")
     })
 }
+
+const handleLogout = async () => {
+    await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).catch(() => {
+        ElMessage.info("取消退出操作")
+        throw new Promise(() => {
+        })
+    })
+    ElMessage.success("用户已经成功退出！")
+    router.push({ name: "login" })
+}
 </script>
 <template>
     <div class="all">
         <div class="top">
             <div class="logo"><img src="@/images/logo.png"></div>
-            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })">对话</div>
-            <div class="change-two"><img src="@/images/change-two.png"  @click="router.push({ path: '/database' })">数据库</div>
+            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })">
+            <span class="text-style">对话</span>    
+            </div>
+            <div class="change-two"><img src="@/images/change-two.png"  @click="router.push({ path: '/database' })">
+            <span class="text-style">数据库</span>
+            </div>
             <div class="navigator">
+            <el-dropdown>
+                <span class="el-dropdown-link">
                 <img class="user" src="@/images/user.png">
+                <el-icon class="el-icon--right">
+                     <img src="@/images/updown.png">
+                </el-icon>
+                </span>
+            <template #dropdown>
+              <el-dropdown-menu >
+                <el-dropdown-item ><img src="@/images/edit.png"> 编辑</el-dropdown-item>
+                <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+            </el-dropdown>
             </div>
         </div>
         <el-container class="content">
@@ -70,7 +101,7 @@ function send() {
     flex-shrink: 0;
 }
 .infinite-list {
-  height: 60vh;
+  height: 70vh;
   width: 60vw;
   padding: 0;
   margin: 0 auto;
@@ -105,7 +136,8 @@ img{
 
 .top{
     display: flex;
-    height: 4%;
+    align-items: center;
+    height: 5%;
     width: 100%;
     align-items: center;
 }
@@ -114,8 +146,17 @@ img{
     cursor: pointer;
 }
 
+
+.text-style{
+    margin-left: 5px;
+    font-weight: 400;
+    font-size: 15px;
+}
+
 .change-one{
+    display: flex;
     flex-grow: 2;
+    align-items: center;
 }
 .logo {
     position: relative;
@@ -125,7 +166,9 @@ img{
     color: raba(0, 0, 0, 1);
 }
 .change-two{
+    display: flex;
     flex-grow: 50;
+    align-items: center;
 }
 .navigator {
     position: relative;
@@ -136,7 +179,7 @@ img{
     position: absolute;
     text-align: center;
     width: 100%;
-    height: 96%;
+    height: 95%;
 }
 
 .left-content {

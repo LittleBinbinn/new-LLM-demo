@@ -65,6 +65,9 @@ function testPassword(val) {
 <template>
     <div class="contain"> 
             <div class="binner">
+                <div class="logo">
+                    <img src="@/images/logo-big.png">
+                </div>
                 <div class="title">
                     注册
                 </div>
@@ -115,6 +118,12 @@ function testPassword(val) {
     margin-left: 520px;
     width: 200px;
 }
+
+.logo{
+    position: absolute;
+    right: 0;
+}
+
 .user{
     position: relative;
     margin-top: 50px;

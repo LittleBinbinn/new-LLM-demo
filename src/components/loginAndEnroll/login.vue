@@ -75,6 +75,9 @@ function handleBlured() {
 <template>
     <div class="contain">
             <div class="binner">
+                <div class="logo">
+                    <img src="@/images/logo-big.png">
+                </div>
                 <div class="title">
                     登录
                 </div>
@@ -123,6 +126,11 @@ function handleBlured() {
     left: 50%;
     transform: translate(-50%,-50%);
     border-radius:25px ;
+}
+
+.logo{
+    position: absolute;
+    right: 0;
 }
 .title{
     position: relative;

@@ -73,6 +73,19 @@ function show(index) {
         };
 }
 
+const handleLogout = async () => {
+    await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).catch(() => {
+        ElMessage.info("取消退出操作")
+        throw new Promise(() => {
+        })
+    })
+    ElMessage.success("用户已经成功退出！")
+    router.push({ name: "login" })
+}
 
 //上传文件至数据库
 // function upload(item){
@@ -97,11 +110,27 @@ function show(index) {
     <div class="all">
         <div class="top">
             <div class="logo"><img src="@/images/logo.png"></div>
-            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })" >对话</div>
-            <div class="change-two"><img src="@/images/change-two.png" @click="router.push({ path: '/database' })">数据库</div>
+            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })" >
+                <sapn class="text">对话</sapn>
+            </div>
+            <div class="change-two"><img src="@/images/change-two.png" @click="router.push({ path: '/database' })">
+                <span class="text">数据库</span>
+            </div>
             <div class="navigator">
-                <img class="user" src="@/images/user.png">
-                <img class="list" src="@/images/list.png" alt="" >
+            <el-dropdown>
+                <span class="el-dropdown-link">
+                    <img class="user" src="@/images/user.png">
+                    <el-icon class="el-icon--right">
+                         <img src="@/images/updown.png">
+                    </el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu >
+                    <el-dropdown-item ><img src="@/images/edit.png"> 编辑</el-dropdown-item>
+                    <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+            </el-dropdown>
             </div>
         </div>
         <el-container class="content">
@@ -156,13 +185,18 @@ function show(index) {
 }
 
 .infinite-list {
-    height: 850px;
+    height: 70vh;
     width: 60vw;
     padding: 0;
     margin: 0 auto;
     list-style: none;
 }
 
+.text{
+    margin-left: 5px;
+    font-weight: 400;
+    font-size: 15px;
+}
 .infinite-list-item {
     display: flex;
     align-items: start;
@@ -176,13 +210,6 @@ function show(index) {
 .infinite-list .infinite-list-item+.list-item {
     margin-top: 10px;
 }
-
-.text {
-    padding-left: 20px;
-    font-size: 28px;
-    color: black;
-}
-
 
 img{
     cursor: pointer;
@@ -206,7 +233,7 @@ img{
 
 .top {
     display: flex;
-    height: 4%;
+    height: 5%;
     width: 100%;
     align-items: center;
 }
@@ -216,7 +243,9 @@ img{
     cursor: pointer;
 }
 .change-one{
+    display: flex;
     flex-grow: 2;
+    align-items: center;
 }
 .logo {
     position: relative;
@@ -226,7 +255,9 @@ img{
     color: raba(0, 0, 0, 1);
 }
 .change-two{
+    display: flex;
     flex-grow: 50;
+    align-items: center;
 }
 .navigator {
     position: relative;
@@ -237,7 +268,7 @@ img{
     position: absolute;
     text-align: center;
     width: 100%;
-    height: 96%;
+    height: 95%;
 }
 
 .left-content {
