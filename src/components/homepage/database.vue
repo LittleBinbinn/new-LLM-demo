@@ -6,20 +6,8 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import { uploadFile,getFile } from '@/api/database.js';
 import { all } from 'axios';
 
-
 const router = useRouter()
 const allfile = ref([])
-
-
-//得到文件列表
-// getFile().then(res=>{
-//     if (res.data.error == '查询错误') {
-//         return new Promise({})
-//     } else {
-//         allfile.value.push(res.data)  
-//     }
-//     console.log(res.data);
-// })
 
 //删除文件
 const handleDelete = async (id) => {
@@ -63,14 +51,14 @@ const upload_progress = async (e, file, fileList) => {
 }
 
 //点击展示文件内容
-function show(index) {
+function show(index){
     let reader = new FileReader();
     reader.readAsText(file.raw);
-    reader.onload = function () {
+    reader.onload = function (){
         if (reader.result) {
-                console.log(reader.result);
-            }
-        };
+            console.log(reader.result);
+        }
+    }
 }
 
 const handleLogout = async () => {
@@ -102,7 +90,6 @@ const handleLogout = async () => {
 //     }).catch(err => {
 //         ElMessage.error("上传失败!")
 //     })
-    
 // }
 
 </script>
@@ -121,7 +108,7 @@ const handleLogout = async () => {
                 <span class="el-dropdown-link">
                     <img class="user" src="@/images/user.png">
                     <el-icon class="el-icon--right">
-                         <img src="@/images/updown.png">
+                        <img src="@/images/updown.png">
                     </el-icon>
                 </span>
                 <template #dropdown>
@@ -160,7 +147,6 @@ const handleLogout = async () => {
                     <el-table-column prop="address" label="操作" align="center" v-slot="scope">
                         <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
                     </el-table-column>
-
                 </el-table>
             </el-scrollbar>
 

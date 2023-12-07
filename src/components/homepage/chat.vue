@@ -36,6 +36,11 @@ const handleLogout = async () => {
     ElMessage.success("用户已经成功退出！")
     router.push({ name: "login" })
 }
+
+const handleEdit = () => {
+    router.push({ name: "user" });
+}
+
 </script>
 <template>
     <div class="all">
@@ -57,7 +62,7 @@ const handleLogout = async () => {
                 </span>
             <template #dropdown>
               <el-dropdown-menu >
-                <el-dropdown-item ><img src="@/images/edit.png"> 编辑</el-dropdown-item>
+                <el-dropdown-item ><img src="@/images/edit.png" @click="handleEdit"> 编辑</el-dropdown-item>
                 <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -80,12 +85,12 @@ const handleLogout = async () => {
                 </div>
             </el-aside>
             <el-main class="right-content">
-                 <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-                        <li v-for="item in items" :key="item" class="infinite-list-item">
-                            <el-avatar class="user-img" :size="40" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
-                            <div class="text">{{ item }}</div>
-                        </li>
-                 </ul>
+                <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+                    <li v-for="item in items" :key="item" class="infinite-list-item">
+                        <el-avatar class="user-img" :size="40" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+                        <div class="text">{{ item }}</div>
+                    </li>
+                </ul>
                 <div class="user-text">
                      <el-input v-model="textarea" :autosize="{ minRows: 1, maxRows: 4 }" type="textarea" placeholder="请输入您的问题" class="input-n" />
                      <img class="send" src="@/images/send.png" @click="send"/>

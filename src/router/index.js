@@ -31,6 +31,12 @@ const router = createRouter({
           name: "chat",
           meta: { keepAlive: true },
          component: ()  => import('../components/homepage/chat.vue')
+        },
+        {
+          path: "/user",
+          name: "user",
+          meta: { keepAlive: true },
+          component: () => import('../components/homepage/user.vue')
         }
         
     ]
