@@ -1,4 +1,23 @@
 <script setup >
+import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus';
+
+const router = useRouter()
+
+const handleLogout = async () => {
+    await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).catch(() => {
+        ElMessage.info("取消退出操作")
+        throw new Promise(() => {
+        })
+    })
+    ElMessage.success("用户已经成功退出！")
+    router.push({ name: "login" })
+}
+
 </script>
 <template>
 <div class="all">
@@ -19,10 +38,10 @@
                     </el-icon>
                     </span>
                 <template #dropdown>
-                  <el-dropdown-menu >
-                    <el-dropdown-item ><img src="@/images/edit.png" @click="handleEdit"> 编辑</el-dropdown-item>
-                    <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
-                  </el-dropdown-menu>
+                    <el-dropdown-menu >
+                        <el-dropdown-item @click="router.push({ path: '/user' })"><img src="@/images/edit.png" > 编辑</el-dropdown-item>
+                        <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
+                    </el-dropdown-menu>
                 </template>
                 </el-dropdown>
                 </div>

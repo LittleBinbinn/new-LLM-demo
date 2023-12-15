@@ -112,10 +112,10 @@ const handleLogout = async () => {
                     </el-icon>
                 </span>
                 <template #dropdown>
-                  <el-dropdown-menu >
-                    <el-dropdown-item ><img src="@/images/edit.png"> 编辑</el-dropdown-item>
+                <el-dropdown-menu >
+                    <el-dropdown-item @click="router.push({ path: '/user' })"><img src="@/images/edit.png" > 编辑</el-dropdown-item>
                     <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
-                  </el-dropdown-menu>
+                </el-dropdown-menu>
                 </template>
             </el-dropdown>
             </div>

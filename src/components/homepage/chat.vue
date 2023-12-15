@@ -11,16 +11,15 @@ const res = ref()
 
 function send() {
     items.value.push(textarea.value)
-    
     console.log(textarea.value);
-    sendChat({
-        message: textarea.value
-    }).then(response => {
-        res.value = response.data.chinese_response
-        items.value.push(res.value)
-    }).catch(error => {
-        ElMessage.error("获取信息失败!")
-    })
+    // sendChat({
+    //     message: textarea.value
+    // }).then(response => {
+    //     res.value = response.data.chinese_response
+    //     items.value.push(res.value)
+    // }).catch(error => {
+    //     ElMessage.error("获取信息失败!")
+    // })
 }
 
 const handleLogout = async () => {
@@ -37,9 +36,6 @@ const handleLogout = async () => {
     router.push({ name: "login" })
 }
 
-const handleEdit = () => {
-    router.push({ name: "user" });
-}
 
 </script>
 <template>
@@ -62,7 +58,7 @@ const handleEdit = () => {
                 </span>
             <template #dropdown>
               <el-dropdown-menu >
-                <el-dropdown-item ><img src="@/images/edit.png" @click="handleEdit"> 编辑</el-dropdown-item>
+                <el-dropdown-item @click="router.push({ path: '/user' })"><img src="@/images/edit.png" > 编辑</el-dropdown-item>
                 <el-dropdown-item divided @click="handleLogout"><img src="@/images/exit.png">退出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -85,14 +81,20 @@ const handleEdit = () => {
                 </div>
             </el-aside>
             <el-main class="right-content">
-                <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+                <div class="chat">
+                    <div class="chat-item" v-for="item in items" :key="item">
+                        <img src="@/images/user-double.png" class="user-img" :size="40" />
+                        <div class="text">{{item}}</div>
+                    </div>
+                </div>
+                <!-- <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
                     <li v-for="item in items" :key="item" class="infinite-list-item">
                         <el-avatar class="user-img" :size="40" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
                         <div class="text">{{ item }}</div>
                     </li>
-                </ul>
+                </ul> -->
                 <div class="user-text">
-                     <el-input v-model="textarea" :autosize="{ minRows: 1, maxRows: 4 }" type="textarea" placeholder="请输入您的问题" class="input-n" />
+                     <el-input v-model="textarea" :autosize="{ minRows: 1, maxRows: 2 }" type="textarea" placeholder="请输入您的问题" class="input-n" />
                      <img class="send" src="@/images/send.png" @click="send"/>
                 </div>
             </el-main>
@@ -100,40 +102,43 @@ const handleEdit = () => {
     </div>
 </template>
 <style scoped lang='scss'>
-
+//对话写入：
+.chat{
+    margin: 0 auto;
+    height: 75vh;
+    width: 70vw;
+    overflow-y: scroll;
+}
+.chat-item{         
+    display: flex;
+    align-items: start;
+    justify-content:flex-start;
+    max-width: 65vw;
+    height: auto;
+}
 .user-img{
-    margin-right: 20px;
     flex-shrink: 0;
-}
-.infinite-list {
-  height: 70vh;
-  width: 60vw;
-  padding: 0;
-  margin: 0 auto;
-  list-style: none;
-}
-.infinite-list-item {
-  display: flex;
-  align-items: start;
-  justify-content:flex-start;
-  background: var(--el-color-primary-light-9);
-  color: black;
-  margin: 20px;
-  padding: 20px;
-}
-
-.infinite-list .infinite-list-item + .list-item {
-  margin-top: 10px;
+    margin-top: 35px;
+    margin-left:20px;
 }
 
 .text{
-    padding-left:20px;
+    height: auto;
+    margin-top: 35px;
+    margin-left:20px;
+    padding: 10px 15px;
+  
     font-size: 28px;
+    max-width: 66vw;
     color:black;
+    background-color: white;
 }
+
+::-webkit-scrollbar{display: none;}
 img{
     cursor: pointer;
 }
+
 .all{
     height: 100vh;
     width: 100%;
@@ -163,6 +168,7 @@ img{
     flex-grow: 2;
     align-items: center;
 }
+
 .logo {
     position: relative;
     flex-grow: 10;
@@ -170,11 +176,13 @@ img{
     font-size: 20px;
     color: raba(0, 0, 0, 1);
 }
+
 .change-two{
     display: flex;
     flex-grow: 50;
     align-items: center;
 }
+
 .navigator {
     position: relative;
     flex-grow: 1;

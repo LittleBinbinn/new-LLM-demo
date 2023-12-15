@@ -63,6 +63,11 @@ function testPassword(val) {
 </script>
 
 <template>
+
+
+
+
+
     <div class="contain"> 
             <div class="binner">
                 <div class="logo">
