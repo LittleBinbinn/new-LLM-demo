@@ -24,7 +24,6 @@ const handleDelete = async (id) => {
     allfile.value.pop(id);
 }
 
-
 //上传文件
 const upload_progress = async (e, file, fileList) => {
     let date = new Date()
@@ -39,14 +38,16 @@ const upload_progress = async (e, file, fileList) => {
             level: "上传完成...",
             content: reader.result
         }
-        uploadFile({
-            'currentFile' : currentFile
-        }).then(res => {
-            allfile.value.push(currentFile)
-            ElMessage.success("上传成功!")
-        }).catch(err => {
-            ElMessage.error("上传失败!请重新上传")
-        })
+        allfile.value.push(currentFile);
+
+        // uploadFile({
+        //     'currentFile' : currentFile
+        // }).then(res => {
+        //     allfile.value.push(currentFile)
+        //     ElMessage.success("上传成功!")
+        // }).catch(err => {
+        //     ElMessage.error("上传失败!请重新上传")
+        // })
     }
 }
 
@@ -130,10 +131,22 @@ const handleLogout = async () => {
                     <img src="@/images/search.png" alt="" class="search-img">
                     <input type="text" placeholder="搜索历史记录" class="search-text">
                 </div>
-                <div class="delete">
+                <div class="file-list">
+                    <img src="@/images/file.png">
+                    历史文件
+                </div>
+                <div class="file">
+                    <div class="file-item" v-for="item in allfile" :key="item">
+                        <div class="file-img"><img src="@/images/file.png"></div>
+                        <div class="file-name">{{item.name}}</div>
+                        <div class="file-time">{{item.time}}</div>
+                    </div>
+                </div>
+                
+                <!-- <div class="delete">
                     <img src="@/images/delete.png" alt="" class="rubbish">
                     <span>批量删除</span>
-                </div>
+                </div> -->
             </el-aside>
             <el-main class="right-content">
             <el-scrollbar  style="height: 60vh">
@@ -300,6 +313,42 @@ img{
     opacity: 0.25;
 }
 
+.file-list{
+    margin-top: 20px;
+    color: rgba(26, 31, 92, 1);
+    text-align: start;
+    font-size: 28px;
+    margin-left: 30px;
+}
+
+.file{
+    margin-top: 20px;
+    height: auto;
+}
+.file-item{
+    text-align: start;
+    height: 90px;
+    border-radius: 10px;
+    border: 1px solid rgba(123, 123, 209, 1);
+}
+
+.file-img{
+    margin-top:10px;
+    margin-left: 30px;
+    display: inline-block;
+}
+
+.file-name{
+    display:inline-block;
+    margin-left:20px;
+}
+
+.file-time{
+    margin-top:5px;
+    margin-left:30px;
+    font-size: 18px;
+    color: rgba(89, 89, 89, 1);
+}
 .delete {
     position: absolute;
     font-size: 30px;
