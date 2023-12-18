@@ -8,6 +8,9 @@ import { all } from 'axios';
 
 const router = useRouter()
 const allfile = ref([])
+const isVisible = ref(true)
+const text = ref()
+const textName = ref()
 
 //删除文件
 const handleDelete = async (id) => {
@@ -39,7 +42,6 @@ const upload_progress = async (e, file, fileList) => {
             content: reader.result
         }
         allfile.value.push(currentFile);
-
         // uploadFile({
         //     'currentFile' : currentFile
         // }).then(res => {
@@ -52,16 +54,21 @@ const upload_progress = async (e, file, fileList) => {
 }
 
 //点击展示文件内容
-function show(index){
-    let reader = new FileReader();
-    reader.readAsText(file.raw);
-    reader.onload = function (){
-        if (reader.result) {
-            console.log(reader.result);
+function readFile(index){
+    let count = 0;
+    for(let item of allfile.value ){
+        if(count == index){
+            text.value = item.content;
+            textName.value = item.name;
+        }else{
+            count++;
         }
     }
+    console.log(count);
+    isVisible.value = !isVisible.value;
 }
 
+//用户退出
 const handleLogout = async () => {
     await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
         confirmButtonText: '确定',
@@ -136,23 +143,18 @@ const handleLogout = async () => {
                     历史文件
                 </div>
                 <div class="file">
-                    <div class="file-item" v-for="item in allfile" :key="item">
+                    <div class="file-item" v-for="(item,index) in allfile" :key="item" @click="readFile(index)">
                         <div class="file-img"><img src="@/images/file.png"></div>
                         <div class="file-name">{{item.name}}</div>
                         <div class="file-time">{{item.time}}</div>
                     </div>
                 </div>
-                
-                <!-- <div class="delete">
-                    <img src="@/images/delete.png" alt="" class="rubbish">
-                    <span>批量删除</span>
-                </div> -->
             </el-aside>
-            <el-main class="right-content">
-            <el-scrollbar  style="height: 60vh">
+            <el-main class="right-content" >
+            <el-scrollbar  style="height: 60vh" v-show="isVisible">
                 <el-table :data="allfile" border style="width: 100%">
                     <el-table-column type="index" label="序号" align="center"/>
-                    <el-table-column prop="name" label="文件名称"  align="center" @click = "show">
+                    <el-table-column prop="name" label="文件名称"  align="center" >
                     </el-table-column>
                     <el-table-column prop="size" label="文件大小"  align="center" />
                     <el-table-column prop="time" label="上传时间"  align="center" />
@@ -163,8 +165,18 @@ const handleLogout = async () => {
                 </el-table>
             </el-scrollbar>
 
-            <div class="user-text">
-                <el-upload class="upload-demo" action drag :file-list="fileList"  :on-progress="upload_progress" :http-request="upload">
+            <!-- 文件内容显示部分 -->
+            <div class="readFileContent" v-show="!isVisible">
+                <div class="fileTile">
+                    当前文件:{{textName}}
+                </div>
+                <div class="fileContent">
+                    {{text}}
+                </div>
+            </div>
+
+            <div class="user-text" v-show="isVisible">
+                <el-upload class="upload-demo" action drag   :on-progress="upload_progress" >
                     <el-icon class="el-icon--upload">
                         <upload-filled />
                     </el-icon>
@@ -178,6 +190,7 @@ const handleLogout = async () => {
     </div>
 </template>
 <style scoped lang='scss'>
+::-webkit-scrollbar{display: none;}
 .user-img {
     margin-right: 20px;
     flex-shrink: 0;
@@ -216,7 +229,12 @@ img{
 .all {
     height: 100vh;
     width: 100%;
-}.card-header {
+}
+
+
+
+
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -330,8 +348,8 @@ img{
     height: 90px;
     border-radius: 10px;
     border: 1px solid rgba(123, 123, 209, 1);
+    cursor: pointer;
 }
-
 .file-img{
     margin-top:10px;
     margin-left: 30px;
@@ -340,11 +358,13 @@ img{
 
 .file-name{
     display:inline-block;
-    margin-left:20px;
+    padding-top: 5px;
+    font-size:20px;
+    margin-left:10px;
 }
 
 .file-time{
-    margin-top:5px;
+    margin-top:8px;
     margin-left:30px;
     font-size: 18px;
     color: rgba(89, 89, 89, 1);
@@ -401,5 +421,23 @@ img{
 
 .upload-demo{
     width: 50vw;
+}
+
+.readFileContent{
+    margin: 0 auto;
+    width: 75vw;
+}
+.fileTile{
+   display: inline-block;
+   border:2px solid black;
+   padding: 10px;
+   font-size: 24px;
+   font-weight: 700;
+   border-radius: 12px;
+   color: rgba(25, 36, 156, 1);
+   background-color: white;
+}
+.fileContent{
+    margin-top:30px;
 }
 </style>
