@@ -41,6 +41,7 @@ const upload_progress = async (e, file, fileList) => {
             level: "上传完成...",
             content: reader.result
         }
+      
         allfile.value.push(currentFile);
         // uploadFile({
         //     'currentFile' : currentFile
@@ -55,18 +56,17 @@ const upload_progress = async (e, file, fileList) => {
 
 //点击展示文件内容
 function readFile(index){
-    let count = 0;
-    for(let item of allfile.value ){
-        if(count == index){
-            text.value = item.content;
-            textName.value = item.name;
-        }else{
-            count++;
-        }
+    
+    
+      
+            text.value = allfile.value[index].content;
+            textName.value = allfile.value[index].name;
+            isVisible.value = !isVisible.value;
+      
     }
-    console.log(count);
-    isVisible.value = !isVisible.value;
-}
+  
+    
+
 
 //用户退出
 const handleLogout = async () => {
@@ -99,6 +99,17 @@ const handleLogout = async () => {
 //         ElMessage.error("上传失败!")
 //     })
 // }
+
+
+//解析名字长度
+
+function load(len){
+    if(len.length>10){
+        return len.slice(0,10)+"...."
+    }else{
+        return len
+    }
+}
 
 </script>
 <template>
@@ -145,7 +156,7 @@ const handleLogout = async () => {
                 <div class="file">
                     <div class="file-item" v-for="(item,index) in allfile" :key="item" @click="readFile(index)">
                         <div class="file-img"><img src="@/images/file.png"></div>
-                        <div class="file-name">{{item.name}}</div>
+                        <div class="file-name">{{load(item.name)}}</div>
                         <div class="file-time">{{item.time}}</div>
                     </div>
                 </div>
