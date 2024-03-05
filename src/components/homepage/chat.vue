@@ -33,6 +33,7 @@ const handleLogout = async () => {
         })
     })
     ElMessage.success("用户已经成功退出！")
+    localStorage.removeItem("token")
     router.push({ name: "login" })
 }
 

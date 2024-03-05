@@ -10,23 +10,27 @@ const message = ref()
 const password = ref()
 
 const submit = () => {
-        if (test()) {
-        postLogin({
-            user: message.value,
-            pwd: password.value
-        }).then(res => {
-            if(res.data.right == "登陆成功"){
-            ElMessage.success("登陆成功！");
-            router.push({
+    //     if (test()) {
+    //     postLogin({
+    //         user: message.value,
+    //         pwd: password.value
+    //     }).then(res => {
+    //         if(res.data.right == "登陆成功"){
+    //         ElMessage.success("登陆成功！");
+    //         router.push({
+    //             path:"/chat"
+    //         })
+    //     }else{
+    //         ElMessage.error("账号或者密码不正确，请重新检查！");
+    //     }
+    //     }).catch(error => {
+    //         ElMessage.error("登录失败！请再次检查账号和密码");
+    //     })
+    // }
+    router.push({
                 path:"/chat"
             })
-        }else{
-            ElMessage.error("账号或者密码不正确，请重新检查！");
-        }
-        }).catch(error => {
-            ElMessage.error("登录失败！请再次检查账号和密码");
-        })
-    }
+    localStorage.setItem('token',"AFASDFSAF-13145210")
 }
 
 

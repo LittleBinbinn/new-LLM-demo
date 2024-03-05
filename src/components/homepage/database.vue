@@ -56,14 +56,10 @@ const upload_progress = async (e, file, fileList) => {
 
 //点击展示文件内容
 function readFile(index){
-    
-    
-      
             text.value = allfile.value[index].content;
             textName.value = allfile.value[index].name;
             isVisible.value = !isVisible.value;
-      
-    }
+}
   
     
 
@@ -79,6 +75,7 @@ const handleLogout = async () => {
         throw new Promise(() => {
         })
     })
+    localStorage.removeItem("token")
     ElMessage.success("用户已经成功退出！")
     router.push({ name: "login" })
 }

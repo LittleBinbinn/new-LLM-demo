@@ -7,7 +7,7 @@ const router = createRouter({
         {
           path: "/",
           
-          component: () => import('../components/homepage/chat.vue')
+          component: () => import('../components/loginAndEnroll/login.vue')
         },
         {
           path: "/login",
@@ -43,7 +43,22 @@ const router = createRouter({
     ]
 })
 
-
+const whiteList = ["/login", "/enroll","/"]
+router.beforeEach((to,from,next) => {
+  if (localStorage.getItem('token')) {
+    if (to.path === '/login' || to.path === "/") {
+      next("/chat")
+    } else {
+      next()
+    }
+  } else {
+     if (whiteList.includes(to.fullPath)) {
+      next()
+  } else {
+    next("/")
+  }
+  }
+})
 
 
 export default router
