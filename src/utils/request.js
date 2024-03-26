@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const request = axios.create({
-    baseURL:"http://221.216.62.50:28041"
+    baseURL:"http://120.46.76.5:80"
 })
+
 
 
 

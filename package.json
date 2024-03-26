@@ -10,11 +10,14 @@
   "dependencies": {
     "element-plus": "^2.4.1",
     "http-proxy-middleware": "^2.0.6",
+    "markdown-it": "^14.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-pxtorem": "^6.1.0",
     "sass": "^1.69.5",
     "vite": "^4.4.11"
   }

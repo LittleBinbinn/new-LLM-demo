@@ -6,7 +6,6 @@ const router = createRouter({
     routes: [
         {
           path: "/",
-          
           component: () => import('../components/loginAndEnroll/login.vue')
         },
         {
@@ -43,10 +42,13 @@ const router = createRouter({
     ]
 })
 
-const whiteList = ["/login", "/enroll","/"]
+
+const whiteList = ["/login", "/enroll", "/"]
+
+
 router.beforeEach((to,from,next) => {
   if (localStorage.getItem('token')) {
-    if (to.path === '/login' || to.path === "/") {
+    if (to.path === '/login' || to.path === "/" || to.path === "/enroll") {
       next("/chat")
     } else {
       next()

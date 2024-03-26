@@ -1,6 +1,5 @@
 import request from "../utils/request";
 
-
 export const uploadFile = (params) => {
     return request({
         method: "POST",
@@ -9,11 +8,20 @@ export const uploadFile = (params) => {
     })
 }
 
-
-
-export const getFile = () => {
+export const deleteFile = (params) => {
     return request({
-        method: "GET",
-        url: "api/upload",
+        method: "POST",
+        url: "api/delete",
+         data:params,
     })
 }
+
+export const getFile = () => {
+  
+    return request({
+        method: "GET",
+        url: "api/database?username="+localStorage.getItem("username")
+    })
+}
+
+

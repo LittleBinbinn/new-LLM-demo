@@ -22,11 +22,11 @@ const handleLogout = async () => {
 <template>
 <div class="all">
     <div class="top">
-                <div class="logo"><img src="@/images/logo.png"></div>
-                <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })">
+                <div class="logo"><img src="@/images/newLogo.jpg" style="height:40px;width:40px" /></div>
+                <div class="change-one"><img src="@/images/change-one.png" style="height:30px;width:30px" @click="router.push({ path: '/chat' })">
                 <span class="text-style">对话</span>    
                 </div>
-                <div class="change-two"><img src="@/images/change-two.png"  @click="router.push({ path: '/database' })">
+                <div class="change-two"><img src="@/images/change-two.png" style="height:30px;width:30px"  @click="router.push({ path: '/database' })">
                 <span class="text-style">数据库</span>
                 </div>
                 <div class="navigator">
@@ -59,15 +59,15 @@ const handleLogout = async () => {
             </div>
             <div class="user-name">
                 <div class="user-text">密码</div>
-                <div class="user-input"><input type="text" class="input"></div>
+                <div class="user-input"><input type="password" class="input"></div>
             </div>
              <div class="user-name">
                     <div class="user-text">新密码</div>
-                    <div class="user-input"><input type="text" class="input"></div>
+                    <div class="user-input"><input type="password" class="input"></div>
                 </div>
             <div class="user-name">
                     <div class="user-text">确认密码</div>
-                    <div class="user-input"><input type="text" class="input"></div>
+                    <div class="user-input"><input type="password" class="input"></div>
             </div>
             <div class="change">
                 <button class="confirm">确认</button>

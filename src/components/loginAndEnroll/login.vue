@@ -2,7 +2,7 @@
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { postLogin } from '@/api/usr.js';
+import { postLogin } from '@/api/user.js';
 
 const router = useRouter();
 
@@ -10,27 +10,28 @@ const message = ref()
 const password = ref()
 
 const submit = () => {
-    //     if (test()) {
-    //     postLogin({
-    //         user: message.value,
-    //         pwd: password.value
-    //     }).then(res => {
-    //         if(res.data.right == "登陆成功"){
-    //         ElMessage.success("登陆成功！");
-    //         router.push({
-    //             path:"/chat"
-    //         })
-    //     }else{
-    //         ElMessage.error("账号或者密码不正确，请重新检查！");
-    //     }
-    //     }).catch(error => {
-    //         ElMessage.error("登录失败！请再次检查账号和密码");
-    //     })
-    // }
-    router.push({
+      
+        if (test()) {
+        postLogin({
+            user: message.value,
+            pwd: password.value
+        }).then(res => {
+            if(res.data.right == "登陆成功"){
+            ElMessage.success("登陆成功！");
+            localStorage.setItem('token',"AFASDFSAF-13145210")
+            localStorage.setItem('username',message.value)
+            
+            router.push({
                 path:"/chat"
             })
-    localStorage.setItem('token',"AFASDFSAF-13145210")
+        }else{
+            ElMessage.error("账号或者密码不正确，请重新检查！");
+        }
+        }).catch(error => {
+            ElMessage.error("登录失败！请再次检查账号和密码");
+        })
+    }
+   
 }
 
 
@@ -71,7 +72,7 @@ function handleBlur() {
 function handleBlured() {
     if (!testPassword(password.value))
     {
-         ElMessage.warning("请输入6位及以上的密码")
+        ElMessage.warning("请输入6位及以上的密码")
     } 
 }
 </script>
@@ -80,21 +81,21 @@ function handleBlured() {
     <div class="contain">
             <div class="binner">
                 <div class="logo">
-                    <img src="@/images/logo-big.png">
+                     <img src="@/images/newLogo.jpg" height="120" width="120">
                 </div>
                 <div class="title">
                     登录
                 </div>
                 <div class="user">
                     <input type="text" class="username" placeholder="账户" v-model="message"  @blur="handleBlur">
-                    <input type="text" class="password" placeholder="密码" v-model="password"  @blur="handleBlured">
+                    <input type="password" class="password" placeholder="密码" v-model="password"  @blur="handleBlured">
                 </div>
                 <div class="do">
                     <input type="checkbox" name="" id=""><span>记住密码</span>
                     <a href="">忘记密码？</a>
                 </div>
                 <div class="submit">
-                    <button type="submit" @click="submit">
+                    <button type="submit" @click="submit" >
                         <strong >登录</strong>
                     </button>
                 </div>

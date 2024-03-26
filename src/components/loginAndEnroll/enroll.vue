@@ -1,14 +1,15 @@
 <script setup >
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {postEnroll} from '@/api/usr.js'
+import {postEnroll} from '@/api/user.js'
+import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 //用户名
 let message = ref('')
 //密码
 let password = ref('')
-
+let verification = ref('12ht')
 const enroll = () => {
     if (test()) {
         postEnroll({
@@ -36,13 +37,13 @@ function test() {
         ElMessage.error("请输入账号");
     }
     else if (!testUsername(message.value)) {
-        ElMessage.error("请输入正确的账号");
+        ElMessage.error("请输入10位账号");
     }
     else if (!password.value) {
         ElMessage.error("请输入密码")
     }
     else if (!testPassword(password.value)) {
-        ElMessage.error("请输入正确的密码");
+        ElMessage.error("请输入6位以上正确的密码");
     }
     else {
         return 1
@@ -66,18 +67,18 @@ function testPassword(val) {
     <div class="contain"> 
             <div class="binner">
                 <div class="logo">
-                    <img src="@/images/logo-big.png">
+                    <img src="@/images/newLogo.jpg" height="120" width="120">
                 </div>
                 <div class="title">
                     注册
                 </div>
                 <div class="user">
-                    <input type="text" class="userName" placeholder="帐号" v-model="message">
-                    <input type="text" class="password" placeholder="验证码">
-                    <input type="text" class="setword" placeholder="设置密码" v-model="password">
+                    <input type="text" class="userName" placeholder="手机号" v-model="message">
+                    <input type="text" class="password" placeholder="验证码" v-model="verification">
+                    <input type="password" class="setword" placeholder="设置密码" v-model="password">
                 </div>
-                <div class="enroll" @click="enroll" >
-                    <button>
+                <div class="enroll" >
+                    <button  @click="enroll" style="cursor:pointer">
                         注册
                     </button>
                 </div>

@@ -1,30 +1,71 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 import { UploadFilled } from '@element-plus/icons-vue'
-import { uploadFile,getFile } from '@/api/database.js';
-import { all } from 'axios';
+import { uploadFile ,deleteFile,getFile} from '@/api/database.js';
+import axios, { all } from 'axios';
+import MarkdownIt from 'markdown-it';
 
+
+const html = ref()
 const router = useRouter()
 const allfile = ref([])
 const isVisible = ref(true)
 const text = ref()
 const textName = ref()
+const md = new MarkdownIt()
+let hh = ref()
+
+
+
+function clear(){
+    allfile.value.length = 0
+}
+
+//获取用户所有文件
+async function getAllFile(){
+    await clear()
+    getFile().then((res)=>{
+        for(let i = 0;i < Object.keys(res.data).length;i++){
+            let obj = {
+                index:i+1,
+                name:res.data[i+1][0],
+                size:res.data[i+1][1],
+                time:res.data[i+1][2],
+                level:"上传完成"
+            }
+            allfile.value.push(obj)
+        }
+    })
+}
+
+//
+onMounted(()=>{
+   getAllFile()
+});
+
 
 //删除文件
-const handleDelete = async (id) => {
+const handleDelete = async (Lname) => {
+   
     await ElMessageBox.confirm("确认要删除该文件吗？", "删除提醒", {
         confirmButtonText: "确认",
         cancelButtonText:  "取消"
     }).then((res) => {
-        ElMessage.success("删除成功!")
+        deleteFile({
+            username:localStorage.getItem('username'),
+            fileName:Lname
+        }).then((res)=>{
+            ElMessage.success("删除成功!")
+            getAllFile()
+        })
     }).catch((err) => {
         ElMessage.info("删除操作取消")
         return new Promise((resolve, reject) => {
+            
         })
     })
-    allfile.value.pop(id);
 }
 
 //上传文件
@@ -34,36 +75,47 @@ const upload_progress = async (e, file, fileList) => {
     let reader = new FileReader()
     reader.readAsText(file.raw);
     reader.onload = function () {
-       const currentFile = {
+        const currentFile = {
             name: file.name,
             time: time,
             size: Math.ceil(file.size / 1024) + 'KB',
             level: "上传完成...",
             content: reader.result
         }
-      
-        allfile.value.push(currentFile);
-        // uploadFile({
-        //     'currentFile' : currentFile
-        // }).then(res => {
-        //     allfile.value.push(currentFile)
-        //     ElMessage.success("上传成功!")
-        // }).catch(err => {
-        //     ElMessage.error("上传失败!请重新上传")
-        // })
+        uploadFile({
+            username:localStorage.getItem('username'),
+            currentFile : currentFile
+        }).then(res => {
+          
+           if(res.data.error = "文件已存在"){
+               ElMessage.error("文件已经存在，请删除后重新上传！")
+             return new Promise(()=>{
+               
+             })
+           }else{
+            setTimeout(() => {
+                 getAllFile()
+                 ElMessage.success("上传成功!")
+            }, 500);
+           }
+           
+        }).catch(err => {
+            ElMessage.error("上传失败!请重新上传")
+        })
     }
 }
 
 //点击展示文件内容
 function readFile(index){
-            text.value = allfile.value[index].content;
-            textName.value = allfile.value[index].name;
-            isVisible.value = !isVisible.value;
+        if(judgeFile(allfile.value[index].name)){
+            html.value = md.render(allfile.value[index].content)
+        }else{
+            html.value = "<h2>此文件格式不支持解析,暂时只支持markdown文件</h2>"
+        }
+        textName.value = allfile.value[index].name;
+        isVisible.value = !isVisible.value;
 }
   
-    
-
-
 //用户退出
 const handleLogout = async () => {
     await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
@@ -73,6 +125,7 @@ const handleLogout = async () => {
     }).catch(() => {
         ElMessage.info("取消退出操作")
         throw new Promise(() => {
+
         })
     })
     localStorage.removeItem("token")
@@ -80,26 +133,17 @@ const handleLogout = async () => {
     router.push({ name: "login" })
 }
 
-//上传文件至数据库
-// function upload(item){
-    // let formDatas = new FormData()
-    // formDatas.append('file_name', item.name)
-    // formDatas.append('file_time', item.time)
-    // formDatas.append('file_size', item.size)
-    // // formDatas.append('file_', item.level)
-    // formDatas.append('file_contnt', item.content)
-//     uploadFile({
-//         item
-//     }).then(res =>{
-//        ElMessage.success("上传成功!请刷新")
-//     }).catch(err => {
-//         ElMessage.error("上传失败!")
-//     })
-// }
 
+//判断文件类型
+function judgeFile(name){
+    let arr = name.split(".")
+    if(arr[arr.length-1]=="md"){
+        return true
+    }
+    return false
+}
 
 //解析名字长度
-
 function load(len){
     if(len.length>10){
         return len.slice(0,10)+"...."
@@ -108,15 +152,16 @@ function load(len){
     }
 }
 
+
 </script>
 <template>
     <div class="all">
         <div class="top">
-            <div class="logo"><img src="@/images/logo.png"></div>
-            <div class="change-one"><img src="@/images/change-one.png" @click="router.push({ path: '/chat' })" >
+            <div class="logo"> <img src="@/images/newLogo.jpg" style="height:40px;width:40px"></div>
+            <div class="change-one"><img src="@/images/change-one.png" style="height:30px;width:30px" @click="router.push({ path: '/chat' })" >
                 <sapn class="text">对话</sapn>
             </div>
-            <div class="change-two"><img src="@/images/change-two.png" @click="router.push({ path: '/database' })">
+            <div class="change-two"><img src="@/images/change-two.png" style="height:30px;width:30px" @click="router.push({ path: '/database' })">
                 <span class="text">数据库</span>
             </div>
             <div class="navigator">
@@ -136,6 +181,7 @@ function load(len){
             </el-dropdown>
             </div>
         </div>
+
         <el-container class="content">
             <el-aside class="left-content">
                 <div class="newChat">
@@ -161,14 +207,16 @@ function load(len){
             <el-main class="right-content" >
             <el-scrollbar  style="height: 60vh" v-show="isVisible">
                 <el-table :data="allfile" border style="width: 100%">
-                    <el-table-column type="index" label="序号" align="center"/>
+                    <el-table-column prop="index" label="序号" align="center"/>
                     <el-table-column prop="name" label="文件名称"  align="center" >
                     </el-table-column>
                     <el-table-column prop="size" label="文件大小"  align="center" />
                     <el-table-column prop="time" label="上传时间"  align="center" />
                     <el-table-column prop="level" label="上传状态"   align="center"/>
-                    <el-table-column prop="address" label="操作" align="center" v-slot="scope">
-                        <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                    <el-table-column prop="address" label="操作" align="center">
+                         <template #default="scope">
+                        <el-button type="danger" @click="handleDelete(scope.row.name)">删除</el-button>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-scrollbar>
@@ -178,8 +226,8 @@ function load(len){
                 <div class="fileTile">
                     当前文件:{{textName}}
                 </div>
-                <div class="fileContent">
-                    {{text}}
+                <div class="fileContent" v-html="html">
+                   
                 </div>
             </div>
 
@@ -198,6 +246,7 @@ function load(len){
     </div>
 </template>
 <style scoped lang='scss'>
+
 ::-webkit-scrollbar{display: none;}
 .user-img {
     margin-right: 20px;
