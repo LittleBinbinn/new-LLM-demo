@@ -1,4 +1,5 @@
 <script setup >
+
 import { RouterView } from 'vue-router';
 const aliveComponents = ["chat","database"]
 

@@ -24,10 +24,10 @@ const handleLogout = async () => {
     <div class="top">
                 <div class="logo"><img src="@/images/newLogo.jpg" style="height:40px;width:40px" /></div>
                 <div class="change-one"><img src="@/images/change-one.png" style="height:30px;width:30px" @click="router.push({ path: '/chat' })">
-                <span class="text-style">对话</span>    
+                <span class="text-style" @click="router.push({ path: '/chat' })" style="cursor:pointer">对话</span>    
                 </div>
                 <div class="change-two"><img src="@/images/change-two.png" style="height:30px;width:30px"  @click="router.push({ path: '/database' })">
-                <span class="text-style">数据库</span>
+                <span class="text-style" @click="router.push({ path: '/database' })" style="cursor:pointer">数据库</span>
                 </div>
                 <div class="navigator">
                 <el-dropdown>

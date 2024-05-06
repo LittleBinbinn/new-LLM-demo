@@ -10,7 +10,6 @@ const message = ref()
 const password = ref()
 
 const submit = () => {
-      
         if (test()) {
         postLogin({
             user: message.value,
@@ -36,20 +35,20 @@ const submit = () => {
 
 
 function test() {
-if (!message.value) {
-    ElMessage.error("请输入账号");
-}
-else if (!testUsername(message.value)) {
-    ElMessage.error("请输入正确的账号");
-}
-else if (!password.value) {
-    ElMessage.error("请输入密码")
-}
-else if (!testPassword(password.value)) {
-    ElMessage.error("请输入正确的密码");
-}
-else {
-    return 1;
+    if (!message.value) {
+        ElMessage.error("请输入账号");
+    }
+    else if (!testUsername(message.value)) {
+        ElMessage.error("请输入正确的账号");
+    }
+    else if (!password.value) {
+        ElMessage.error("请输入密码")
+    }
+    else if (!testPassword(password.value)) {
+        ElMessage.error("请输入正确的密码");
+    }
+    else {
+        return 1;
     }
     return 0;
 }

@@ -1,0 +1,33 @@
+/* 设置全局的inputcss */
+input::-webkit-input-placeholder {
+    /* WebKit browsers，webkit内核浏览器 */
+
+    color: black;
+    font-size: 16px;
+}
+
+input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: black;
+    font-size: 16px;
+}
+
+input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: black;
+    font-size: 16px;
+}
+
+input:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: black;
+    font-size: 16px;
+}
+
+
+input {
+    border: 0;
+    outline: none;
+    padding-left: 10px;
+}
+

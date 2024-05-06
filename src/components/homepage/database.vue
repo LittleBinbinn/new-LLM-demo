@@ -3,10 +3,10 @@ import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 import { UploadFilled } from '@element-plus/icons-vue'
-import { uploadFile ,deleteFile,getFile} from '@/api/database.js';
+import { uploadFile ,deleteFile,getFile,showFile} from '@/api/database.js';
 import axios, { all } from 'axios';
 import MarkdownIt from 'markdown-it';
-
+import '../../assets/input.scss'
 
 const html = ref()
 const router = useRouter()
@@ -16,7 +16,6 @@ const text = ref()
 const textName = ref()
 const md = new MarkdownIt()
 let hh = ref()
-
 
 
 function clear(){
@@ -74,7 +73,7 @@ const upload_progress = async (e, file, fileList) => {
     let time = date.toLocaleString()
     let reader = new FileReader()
     reader.readAsText(file.raw);
-    reader.onload = function () {
+        reader.onload =  function(){
         const currentFile = {
             name: file.name,
             time: time,
@@ -82,12 +81,14 @@ const upload_progress = async (e, file, fileList) => {
             level: "上传完成...",
             content: reader.result
         }
-        uploadFile({
+        
+  
+          uploadFile({
             username:localStorage.getItem('username'),
             currentFile : currentFile
         }).then(res => {
           
-           if(res.data.error = "文件已存在"){
+           if(res.data.error == "文件已存在"){
                ElMessage.error("文件已经存在，请删除后重新上传！")
              return new Promise(()=>{
                
@@ -103,19 +104,62 @@ const upload_progress = async (e, file, fileList) => {
             ElMessage.error("上传失败!请重新上传")
         })
     }
+    // reader.onload =  function(){
+    //     const currentFile = {
+    //         name: file.name,
+    //         time: time,
+    //         size: Math.ceil(file.size / 1024) + 'KB',
+    //         level: "上传完成...",
+    //         content: reader.result
+    //     }
+    //     uploadFile({
+    //         username:localStorage.getItem('username'),
+    //         currentFile : currentFile
+    //     }).then(res => {
+          
+    //        if(res.data.error == "文件已存在"){
+    //            ElMessage.error("文件已经存在，请删除后重新上传！")
+    //          return new Promise(()=>{
+               
+    //          })
+    //        }else{
+    //         setTimeout(() => {
+    //              getAllFile()
+    //              ElMessage.success("上传成功!")
+    //         }, 500);
+    //        }
+           
+    //     }).catch(err => {
+    //         ElMessage.error("上传失败!请重新上传")
+    //     })
+    // }
 }
 
 //点击展示文件内容
 function readFile(index){
-        if(judgeFile(allfile.value[index].name)){
-            html.value = md.render(allfile.value[index].content)
-        }else{
-            html.value = "<h2>此文件格式不支持解析,暂时只支持markdown文件</h2>"
-        }
-        textName.value = allfile.value[index].name;
-        isVisible.value = !isVisible.value;
+       showFile(allfile.value[index].name)
+       .then((res)=>{
+            show(res.data.content)
+       }).catch((error)=>{
+            ElMessage.error("获取文件错误，请稍后重试！")
+       })
 }
-  
+
+
+//showFile
+async function show(ine){
+    //异步执行
+    await gett(ine)
+    isVisible.value = !isVisible.value
+    textName.value = allfile.value[index].name
+}
+
+
+function gett(ine){
+    html.value = md.render(ine)
+}
+
+
 //用户退出
 const handleLogout = async () => {
     await ElMessageBox.confirm("确认要退出吗？", "退出询问", {
@@ -134,15 +178,6 @@ const handleLogout = async () => {
 }
 
 
-//判断文件类型
-function judgeFile(name){
-    let arr = name.split(".")
-    if(arr[arr.length-1]=="md"){
-        return true
-    }
-    return false
-}
-
 //解析名字长度
 function load(len){
     if(len.length>10){
@@ -152,17 +187,21 @@ function load(len){
     }
 }
 
-
 </script>
 <template>
     <div class="all">
         <div class="top">
-            <div class="logo"> <img src="@/images/newLogo.jpg" style="height:40px;width:40px"></div>
-            <div class="change-one"><img src="@/images/change-one.png" style="height:30px;width:30px" @click="router.push({ path: '/chat' })" >
-                <sapn class="text">对话</sapn>
+            <div class="logo">
+                <img src="@/images/newLogo.jpg" style="height:40px;width:40px">
+                <span >旅游智能助手</span>
             </div>
-            <div class="change-two"><img src="@/images/change-two.png" style="height:30px;width:30px" @click="router.push({ path: '/database' })">
-                <span class="text">数据库</span>
+            <div class="change-one">
+                <img src="@/images/change-one.png" style="height:25px;width:25px" @click="router.push({ path: '/chat' })" >
+                <sapn class="text" @click="router.push({ path: '/chat' })" style="cursor:pointer">对话</sapn>
+            </div>
+            <div class="change-two">
+                <img src="@/images/change-two.png" style="height:25px;width:25px" @click="router.push({ path: '/database' })">
+                <span class="text" @click="router.push({ path: '/database' })" style="cursor:pointer">数据库</span>
             </div>
             <div class="navigator">
             <el-dropdown>
@@ -189,7 +228,7 @@ function load(len){
                     <span class="new-text"><strong>资料库</strong></span>
                 </div>
                 <div class="search">
-                    <img src="@/images/search.png" alt="" class="search-img">
+                    <img src="@/images/search.png" alt="" class="search-img" style="width:20px;height:40px">
                     <input type="text" placeholder="搜索历史记录" class="search-text">
                 </div>
                 <div class="file-list">
@@ -289,8 +328,6 @@ img{
 }
 
 
-
-
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -322,6 +359,8 @@ img{
     align-items: center;
 }
 .logo {
+    display: flex;
+    align-items: center;
     position: relative;
     flex-grow: 10;
     margin-left: 25px;
@@ -371,10 +410,16 @@ img{
 
 .search {
     display: flex;
+    justify-content: center;
     width: 100%;
     height: 44px;
     margin-top: 17px;
     background: rgba(255, 255, 255, 0.15);
+}
+
+input{
+     background: rgba(255, 255, 255, 0.15);
+     color: black;
 }
 
 .search-img {
@@ -382,10 +427,9 @@ img{
 }
 
 .search-text {
-    font-size: 20px;
+    font-size: 20px; 
     margin-left: 30px;
     width: 90%;
-    opacity: 0.25;
 }
 
 .file-list{

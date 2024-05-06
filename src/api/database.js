@@ -24,4 +24,11 @@ export const getFile = () => {
     })
 }
 
+export const showFile = (target) => {
+      return request({
+        method: "GET",
+        url: "api/get_content?username="+localStorage.getItem("username")+"&fileName="+target
+    })
+}
+
 

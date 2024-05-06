@@ -3,7 +3,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-
 export default defineConfig({
    transpileDependencies: true,
    assetsDir: 'static',
@@ -17,7 +16,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',   
+        target: 'http://127.0.0.1:8000', 
         changeOrigin: true, 
         pathRewrite: {     
           "^/api": "",
