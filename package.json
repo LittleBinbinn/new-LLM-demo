@@ -5,12 +5,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "mock":"vite --mode mock --force"
   },
   "dependencies": {
     "element-plus": "^2.4.1",
     "http-proxy-middleware": "^2.0.6",
     "markdown-it": "^14.0.0",
+    "mockjs": "^1.1.0",
+    "vite-plugin-mock": "^2.9.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },

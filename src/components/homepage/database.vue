@@ -4,9 +4,15 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { uploadFile ,deleteFile,getFile,showFile} from '@/api/database.js';
-import axios, { all } from 'axios';
+
 import MarkdownIt from 'markdown-it';
 import '../../assets/input.scss'
+import axios, { all } from 'axios';
+
+
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
+
 
 const html = ref()
 const router = useRouter()
@@ -81,15 +87,13 @@ const upload_progress = async (e, file, fileList) => {
             level: "上传完成...",
             content: reader.result
         }
-        
-  
           uploadFile({
             username:localStorage.getItem('username'),
             currentFile : currentFile
         }).then(res => {
           
            if(res.data.error == "文件已存在"){
-               ElMessage.error("文件已经存在，请删除后重新上传！")
+             ElMessage.error("文件已经存在，请删除后重新上传！")
              return new Promise(()=>{
                
              })
@@ -104,35 +108,7 @@ const upload_progress = async (e, file, fileList) => {
             ElMessage.error("上传失败!请重新上传")
         })
     }
-    // reader.onload =  function(){
-    //     const currentFile = {
-    //         name: file.name,
-    //         time: time,
-    //         size: Math.ceil(file.size / 1024) + 'KB',
-    //         level: "上传完成...",
-    //         content: reader.result
-    //     }
-    //     uploadFile({
-    //         username:localStorage.getItem('username'),
-    //         currentFile : currentFile
-    //     }).then(res => {
-          
-    //        if(res.data.error == "文件已存在"){
-    //            ElMessage.error("文件已经存在，请删除后重新上传！")
-    //          return new Promise(()=>{
-               
-    //          })
-    //        }else{
-    //         setTimeout(() => {
-    //              getAllFile()
-    //              ElMessage.success("上传成功!")
-    //         }, 500);
-    //        }
-           
-    //     }).catch(err => {
-    //         ElMessage.error("上传失败!请重新上传")
-    //     })
-    // }
+   
 }
 
 //点击展示文件内容
@@ -193,7 +169,7 @@ function load(len){
         <div class="top">
             <div class="logo">
                 <img src="@/images/newLogo.jpg" style="height:40px;width:40px">
-                <span >旅游智能助手</span>
+                <span>智语晋游</span>
             </div>
             <div class="change-one">
                 <img src="@/images/change-one.png" style="height:25px;width:25px" @click="router.push({ path: '/chat' })" >

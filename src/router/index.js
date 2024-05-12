@@ -56,21 +56,21 @@ const router = createRouter({
 const whiteList = ["/login", "/enroll", "/"]
 
 
-router.beforeEach((to,from,next) => {
-  if (localStorage.getItem('token')) {
-    if (to.path === '/login' || to.path === "/" || to.path === "/enroll") {
-      next("/chat")
-    } else {
-      next()
-    }
-  } else {
-     if (whiteList.includes(to.fullPath)) {
-      next()
-  } else {
-    next("/")
-  }
-  }
-})
+// router.beforeEach((to,from,next) => {
+//   if (localStorage.getItem('token')) {
+//     if (to.path === '/login' || to.path === "/" || to.path === "/enroll") {
+//       next("/chat")
+//     } else {
+//       next()
+//     }
+//   } else {
+//      if (whiteList.includes(to.fullPath)) {
+//       next()
+//   } else {
+//     next("/")
+//   }
+//   }
+// })
 
 
 export default router

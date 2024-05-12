@@ -5,21 +5,46 @@ import { ElMessage,ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
 import Header from "../../views/header.vue"
 import '../../assets/input.scss'
+import axios, { all } from 'axios';
+
+
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
+
+
 
 const router = useRouter()
 const textarea = ref('')
 const items = ref([])
 const res = ref()
 var index = ref(0)
+var okk = ref(1)
+var timer = null
+
+function stop(){
+    source.cancel('Operation canceled by the user.');
+}
+
+function judge(){
+    if(okk.value){
+        send()
+    }else{
+        ElMessage.error("请等待回复生成后再进行发送！")
+    }
+}
+
 
 async function send() {
-   
-
-
     //模板
-    writeTemp(textarea.value)
+    okk.value = 0
+    items.value.push(textarea.value)
+    items.value.push("正在生成中......")
+    setTimeout(() => {
+        const message = document.getElementById('overflow');
+        message.scrollTop = message.scrollHeight;
+    }, 100);
+    
     // items.value.push(textarea.value)
-  
     // items.value.push("兽面纹，这一充满神秘色彩的纹饰，其形成与发展深深地扎根于古代先民们的意识形态和宗教信仰之中。兽面纹饰的形成，可以视为象形纹饰寓意意识的发展结果。原始先民们从自然象形纹饰到寓意象形纹饰的认识过程，经历了漫长的岁月，其中包含了他们对于自然和生活的深刻理解与想象。兽面纹并非凭空产生，它的装饰艺术传承自陶器、漆器、玉器上的纹饰。在河南偃师二里头遗址中发现的雕花残漆器，其花纹便似为兽面纹，而陶器片上也出现了算兽鱼纹、双龙纹等。这些发现为我们揭示了兽面纹的历史渊源，即它源于古代先民的日常生活和宗教信仰。在原始氏族社会，图腾崇拜是先民们精神生活和原始信仰的重要寄托。兽面纹，作为图腾徵号的一种，被刻在器物上，用以崇拜、祭祀，并作为保护神器。这种将兽面纹作为图腾的行为，体现了先民们对于自然的敬畏和对于生活的期盼。随着社会的发展，夏代礼玉的宗教意识延续，兽面纹的表号在演化中得到高度概括和提炼。从具象的形态逐渐转化为抽象的形式和象征手法，使得兽面纹更加富有艺术性和神秘感。商代是兽面纹发展的一个高峰时期。早期的兽面纹造型简单，仅有一对兽目，其他部分都被省略。而到了中期，兽目在图案中的比例增大，显得炯炯有神，同时造型线条和形体结构也变得更加复杂，增加了神秘感。到了商代后期，兽面纹达到了最盛行的时期，其特点是兽角扩大，兽目缩小，整体构图更加精细和复杂。西周早期，兽面纹的种类繁多，其主要标志是突出的角型不同。此时的兽面纹在造型上逐渐由方形演化成体型横长的装饰纹样，线条延绵而紧密，充满了艺术感。然而，到了西周晚期，兽面纹开始衰落，至春秋早期已不常见。总的来说，兽面纹的发展历程是一个从简单到复杂，从具象到抽象的过程。它不仅是古代先民们审美观念的体现，更是他们宗教信仰和精神生活的反映。兽面纹以其独特的艺术魅力，成为了中国古代青铜器艺术中的一颗璀璨明珠。")
     //数据发送和获取
     sendChat({
@@ -28,26 +53,42 @@ async function send() {
     }).then(response => {
         textarea.value = ""
         res.value = response.data.result
-       
         writeTemp(res.value)
     }).catch(error => {
+        if (axios.isCancel(error)) {
+        console.log('Request canceled',error);
+        } 
         ElMessage.error("获取信息失败!")
     })
 }
 
-  //打字机
+
+function stopHas(){
+    console.log("qingchu!");
+    clearTimeout(timer)
+}
+
+
+//打字机
  async function writeTemp(valued){
-    var data = valued.split("")
-    items.value.push("")
-    var n = items.value.length
+    //先将传来的字符串分割为数组，
+    items.value[items.value.length-1] = ''
+    const data = valued.split("")
+    const n = items.value.length
     index = 0
     await writing()
     function writing(){
-    if (index < data.length) {
-        items.value[n-1] += data[index ++]
-        let timer = setTimeout(writing, 100)
+    if (index < data.length){
+        items.value[n-1] += data[index++]
+        timer = setTimeout(writing, 100)
     }
+    const message = document.getElementById('overflow');
+    message.scrollTop = message.scrollHeight;
     }
+    setTimeout(() => {
+        okk.value = 1
+    }, data.length*100);
+   
 }
    
   
@@ -76,7 +117,7 @@ const handleLogout = async () => {
         <div class="top">
             <div class="logo">
                 <img src="@/images/newLogo.jpg" style="height:40px;width:40px">
-                 <span >旅游智能助手</span>
+                 <span>智语晋游</span>
             </div>
             <div class="change-one"><img src="@/images/change-one.png" style="height:25px;width:25px" @click="router.push({ path: '/chat' })">
             <span class="text-style" @click="router.push({ path: '/chat' })" style="cursor:pointer">对话</span>    
@@ -113,17 +154,21 @@ const handleLogout = async () => {
                 </div>
             </el-aside>
             <el-main class="right-content">
-
-                <div class="chat">
+              
+                <div class="chat" id="overflow">
                     <div class="chat-item" v-for="item in items" :key="item">
                         <img src="@/images/user-double.png" class="user-img" :size="40" />
+                        <!-- <div class="text" v-if="index % 2 == 1">{{item}}</div> -->
                         <div class="text">{{item}}</div>
                     </div>
                 </div>
 
                 <div class="user-text">
+                      <div class="no">
+                    <el-button @click="stopHas">取消请求</el-button>
+                    </div>
                      <el-input v-model="textarea" :autosize="{ minRows: 1, maxRows: 2 }" type="textarea" placeholder="请输入您的问题" class="input-n" />
-                     <img class="send" src="@/images/send.png" @click="send"/>
+                     <img class="send" src="@/images/send.png" @click="judge"/>
                 </div>
                 
             </el-main>

@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { viteMockServe } from 'vite-plugin-mock'
 
 export default defineConfig({
    transpileDependencies: true,
@@ -9,7 +10,8 @@ export default defineConfig({
    parallel: false,
    publicPath: './',
    productionSourceMap: false,
-    devServer: {
+  devServer: {
+     //解决跨域
     port: 5000,
     host: 'localhost',
     https: false,
@@ -26,6 +28,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    viteMockServe({
+      mockPath: 'src/mock/',  // 设置模拟数据的存储文件夹
+      localEnabled:true,  
+    })
   ],
   resolve: {
     alias: {

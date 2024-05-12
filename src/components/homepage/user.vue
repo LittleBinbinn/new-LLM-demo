@@ -1,6 +1,7 @@
 <script setup >
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus';
+import {temp} from "@/api/mock.js"
 
 const router = useRouter()
 
@@ -18,11 +19,20 @@ const handleLogout = async () => {
     router.push({ name: "login" })
 }
 
+
+function confirm(){
+    temp().then(res=>{
+        console.log(res.data);
+    })
+}
 </script>
 <template>
 <div class="all">
     <div class="top">
-                <div class="logo"><img src="@/images/newLogo.jpg" style="height:40px;width:40px" /></div>
+                <div class="logo">
+                <img src="@/images/newLogo.jpg" style="height:40px;width:40px" />
+                 <span>智语晋游</span>
+                 </div>
                 <div class="change-one"><img src="@/images/change-one.png" style="height:30px;width:30px" @click="router.push({ path: '/chat' })">
                 <span class="text-style" @click="router.push({ path: '/chat' })" style="cursor:pointer">对话</span>    
                 </div>
@@ -70,7 +80,7 @@ const handleLogout = async () => {
                     <div class="user-input"><input type="password" class="input"></div>
             </div>
             <div class="change">
-                <button class="confirm">确认</button>
+                <button class="confirm" @click="confirm">确认</button>
                 <button class="cancel">取消</button>
             </div>
         </div>
@@ -108,11 +118,13 @@ const handleLogout = async () => {
     align-items: center;
 }
 .logo {
+    display: flex;
+    align-items: center;
     position: relative;
     flex-grow: 10;
     margin-left: 25px;
     font-size: 20px;
-    color: raba(0, 0, 0, 1);
+    color: rgba(0, 0, 0, 1);
 }
 .change-two{
     display: flex;
