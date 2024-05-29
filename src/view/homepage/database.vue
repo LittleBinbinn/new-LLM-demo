@@ -87,7 +87,7 @@ const upload_progress = async (e, file, fileList) => {
             level: "上传完成...",
             content: reader.result
         }
-          uploadFile({
+        uploadFile({
             username:localStorage.getItem('username'),
             currentFile : currentFile
         }).then(res => {

@@ -2,14 +2,16 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {postEnroll} from '@/api/user.js'
-import { ElMessage } from 'element-plus';
+import { ElMessage, tagEmits } from 'element-plus';
 
+let isSend = ref(true)
+let change = ref("获取验证码")
 const router = useRouter();
 //用户名
 let message = ref('')
 //密码
 let password = ref('')
-let verification = ref('12ht')
+let verification = ref('')
 const enroll = () => {
     if (test()) {
         postEnroll({
@@ -61,6 +63,72 @@ function testPassword(val) {
 }
 
 
+
+//验证码登录部分
+
+//此函数为发送验证码函数
+function verificatione() {
+    console.log("发送一次");
+    // postVerification({
+    //      sendCodeDTO:{
+    //      phone: phone.value,
+    //      status: 0,
+    // }}).then((res)=>{
+    //     console.log(res);
+    // }).catch((err)=>{
+    //     console.log(err);
+    // })
+}
+
+
+//使用节流发送验证码并限制60s，采用缓存进行精准时间控制
+function throttle(fn){
+    let t1 = 0
+    if(localStorage.getItem("timer")){
+        
+    }else{
+        localStorage.setItem("timer",t1)
+    }
+    return function(args){
+        let t2 = new Date().getTime()
+        if(t2 - localStorage.getItem('timer') > 6000){
+            fn.apply(this,arguments)
+            t1 = t2
+            localStorage.setItem("timer",t1)
+        }
+    }
+}
+
+
+
+//控制验证码的显示和隐藏
+function hide(){
+    let time = 6
+    isSend.value = false
+    let timerr = null
+    new Promise((resolve,reject)=>{
+      timerr = setInterval(() => {
+            change.value = "请等待"+--time+"s"
+            if(time == 0){
+               resolve()
+            }
+      }, 1000);
+    }).then((res)=>{
+        change.value = "发送验证码"
+        isSend.value = true
+         clearInterval(timerr)
+       
+    }).catch((err)=>{
+
+    })
+   
+}
+
+//发送函数，点击事件
+const send = throttle(function(){
+    verificatione()
+    hide()
+})
 </script>
 
 <template>
@@ -75,6 +143,9 @@ function testPassword(val) {
                 <div class="user">
                     <input type="text" class="userName" placeholder="手机号" v-model="message">
                     <input type="text" class="password" placeholder="验证码" v-model="verification">
+                    <div class="verification" @click="send() && isSend">
+                        {{change}}
+                    </div>
                     <input type="password" class="setword" placeholder="设置密码" v-model="password">
                 </div>
                 <div class="enroll" >
@@ -170,5 +241,10 @@ input{
     font-size: 19px;
 }
 
-
+.verification{
+    position: absolute;
+    top:50px;
+    left:180px;
+    cursor: pointer;
+}
 </style>

@@ -9,6 +9,7 @@ const router = useRouter();
 const message = ref()
 const password = ref()
 
+//正常注册部分
 const submit = () => {
         if (test()) {
         postLogin({
@@ -74,6 +75,9 @@ function handleBlured() {
         ElMessage.warning("请输入6位及以上的密码")
     } 
 }
+
+
+
 </script>
 
 <template>

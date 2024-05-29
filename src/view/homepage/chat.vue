@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { sendChat } from '../../api/chat';
 import { ElMessage,ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router'
-import Header from "../../views/header.vue"
+
 import '../../assets/input.scss'
 import axios, { all } from 'axios';
 
@@ -66,6 +66,7 @@ async function send() {
 function stopHas(){
     console.log("qingchu!");
     clearTimeout(timer)
+    okk.value = 1
 }
 
 
